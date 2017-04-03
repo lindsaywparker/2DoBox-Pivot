@@ -1,0 +1,47 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+header {
+  height: 35vh;
+  background-color: #E5F3F2;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #00A79D;
+  font-size: 45px;
+
+}
+
+span {
+  color: #6D6E71;
+}
+
+.input-container {
+  width: 60vw;
+  margin: 0px auto;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+  margin: 0px;
+  border: none;
+  background-color: #00A79D;
+  color: #FFF;
+}
+
+button:hover {
+  background-color: #045E55;
+}
