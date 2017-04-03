@@ -16,16 +16,58 @@ h1 {
   margin-bottom: 30px;
   color: #00A79D;
   font-size: 45px;
+}
 
+h3 {
+  display: inline-block;
+}
+
+h5 {
+  display: inline-block;
+  margin: 15px 0px;
 }
 
 span {
   color: #6D6E71;
 }
 
+.card-container,
 .input-container {
   width: 60vw;
   margin: 0px auto;
+}
+
+.search-input {
+  width: 60vw;
+  margin: 30px auto;
+}
+
+.idea-card {
+  width: 100%;
+  border-bottom: 2px solid #D1D3D4}
+
+.card-btns {
+  width: 25px;
+  height: 25px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: inline-block;
+  background-color: inherit;
+}
+
+.delete-btn {
+  background-image: url("Assets/delete.svg");
+  float: right;
+}
+
+.up-vote {
+  background-image: url("Assets/upvote.svg");
+  margin-right: 15px;
+}
+
+.down-vote {
+  background-image: url("Assets/downvote.svg");
+  margin-right: 15px;
 }
 
 input {
