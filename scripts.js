@@ -67,3 +67,24 @@ function prependCards(array) {
       <h5>quality: ${card.quality}</h5>
       </article>`
   )})}
+
+// Delet buttons
+
+$('.card-container').on('click', '.delete-btn', function() {
+  console.log($(this).closest('article').attr('id'));
+  var uniqueCardId = $(this).closest('article').attr('id');
+  deleteCardLocal(uniqueCardId);
+  // remove(this);
+})
+
+
+
+function deleteCardLocal(uniqueCardId) {
+    console.log(uniqueCardId);
+    var newCardArray = cardArray.filter(function (card) {
+    console.log(newCardArray,'newCardArray');
+    // cardArray = newCardArray;
+    console.log(cardArray,'card array');
+    return card.id != uniqueCardId
+  });
+}
