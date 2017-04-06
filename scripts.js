@@ -9,16 +9,11 @@ $('.submit-btn').on('click', function(){
 });
 
 function addCard() {
-  generateID();
+  // generateID();
   var title = $('.title-input').val();
   var idea = $('.body-input').val();
+  var uniqueID = Date.now();
   var card = new Card(title, idea, uniqueID);
-}
-
-function generateID() {
-  var dateTime = new Date();
-  var uniqueNum = dateTime.getTime();
-  uniqueID = uniqueNum;
 }
 
 function Card(title, idea, uniqueID) {
@@ -27,7 +22,7 @@ function Card(title, idea, uniqueID) {
   this.uniqueID = uniqueID;
   this.quality = qualityArray[0];
   cardArray.push(this);
-  qualityCount = 0
+  qualityCount = 0;
   stringifyArray();
 }
 
@@ -36,6 +31,8 @@ function stringifyArray() {
   toStorage(cardArrayStringify);
   // console.log("cardArrayStringify", cardArrayStringify);
 }
+
+
 
 function toStorage(array) {
   var tempStore = localStorage.setItem( "cardlist",array);
@@ -61,10 +58,9 @@ function prependCards(array) {
   cardContainer.prepend(
       `<article class="idea-card" id=${card.uniqueID}>
         <div class="text">
-          <h3 class="card-title">${card.title}</h3>
+          <h3 class="card-title" contenteditable="true">${card.title}</h3>
           <button class="delete-btn card-btns"></button>
-          <p class="card-idea">${card.idea}
-          </p>
+          <p class="card-idea" contenteditable="true">${card.idea}</p>
         </div>
         <button class="up-vote card-btns"></button>
         <button class="down-vote card-btns"></button>
@@ -76,25 +72,24 @@ function prependCards(array) {
 
 $('.card-container').on('click', '.delete-btn', function() {
   // console.log($(this).closest('article').attr('id'));
-  var uniqueCardId = $(this).closest('article').attr('id');
+  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
+  var uniqueCardId = parseInt(uniqueCardIdtoParse)
+  $(this).closest('article').remove();
+  console.log("uniqueCardId-before", uniqueCardId)
   deleteCardLocal(uniqueCardId);
   // remove(this);
 })
 
 
-
 function deleteCardLocal(uniqueCardId) {
-    // console.log(uniqueCardId);
-    var newCardArray = cardArray.filter(function (card) {
-    // console.log(newCardArray,'newCardArray');
-
-    // console.log(cardArray,'card array');
-    return card.id != uniqueCardId
-  });
+  var cardID = uniqueCardId
+  cardArray.forEach(function(idea, index) {
+    if(cardID == idea.uniqueID) {
+      cardArray.splice(index, 1)
+    }
+    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+  })
 }
-
-
-//Search Functionality
 
 $('.search-input').on('keyup', function() {
     var searchInput = $(this).val().toLowerCase();
@@ -122,6 +117,8 @@ var qualityCount = 0
 
 $('.card-container').on('click', '.up-vote', function() {
   var id = $(this).closest('.idea-card').attr('id');
+  var card =$(this).closest('.idea-card');  // Review with James
+  console.log('card', card); // Review with James
   console.log(id,'cardupvote');
   if (qualityCount < 2) {
     qualityCount++;
@@ -140,38 +137,3 @@ $('.card-container').on('click', '.up-vote', function() {
 $('card-container').on('click', 'down-vote', function() {
 
 })
-
-
-
-
-
-
-
-
-
-
-//
-//
-// $('.search-input').keyup(function() {
-//     var val = $.trim($(this).val()).toLowerCase();
-//     // console.log($('.idea-card').find('h3'));
-//     $('.idea-card').find('h3, p').show().filter(function() {
-//         var text = $(this).text().toLowerCase();
-//         console.log(this);
-//         return !~text.indexOf(val);
-//         console.log('this parent', $(this).parent);
-//         return $(this).closest('article');
-//     }).hide();
-// });
-
-
-// $('.search-input').on('keyup', 'idea-card', function() {
-//     console.log(this);
-//     var val = $.trim($(this).val()).toLowerCase();
-//     // console.log($('.idea-card').find('h3'));
-//     $('.idea-card').show().filter(function() {
-//         var text = $(this).text().toLowerCase();
-//         console.log(this);
-//         return !~text.indexOf(val);
-//     }).hide();
-// });
