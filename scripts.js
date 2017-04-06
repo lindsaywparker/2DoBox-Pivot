@@ -1,6 +1,6 @@
 var uniqueID;
 var cardArray = [];
-var qualityArray = ['swill', 'plausible', 'genius'];
+
 
 fromStorage();
 
@@ -21,7 +21,8 @@ function Card(title, idea, uniqueID) {
   this.title = title;
   this.idea = idea;
   this.uniqueID = uniqueID;
-  this.quality = qualityArray[0];
+  this.qualityArray = ['swill', 'plausible', 'genius']
+  this.quality = this.qualityArray[0];
   cardArray.push(this);
   qualityCount = 0;
   stringifyArray();
@@ -30,14 +31,12 @@ function Card(title, idea, uniqueID) {
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
   toStorage(cardArrayStringify);
-  // console.log("cardArrayStringify", cardArrayStringify);
 }
 
 
 
 function toStorage(array) {
   var tempStore = localStorage.setItem( "cardlist",array);
-  // console.log(localStorage);
   fromStorage();
 }
 
@@ -46,8 +45,6 @@ function fromStorage() {
   var parsedCardList = JSON.parse(storageList);
   if (localStorage.length > 0) {
   cardArray = parsedCardList;
-  // console.log("storageList", storageList)
-  // console.log("parsedCardList",parsedCardList);
   prependCards(parsedCardList);
 }}
 
@@ -65,20 +62,17 @@ function prependCards(array) {
         </div>
         <button class="up-vote card-btns"></button>
         <button class="down-vote card-btns"></button>
-        <h5>quality: ${card.quality}</h5>
+        <h5>quality: <span class="quality">${card.quality}</h5></span>
       </article>`
   )})}
 
-// Delet buttons
+// Delete buttons
 
 $('.card-container').on('click', '.delete-btn', function() {
-  // console.log($(this).closest('article').attr('id'));
   var uniqueCardIdtoParse = $(this).closest('article').attr('id');
   var uniqueCardId = parseInt(uniqueCardIdtoParse)
   $(this).closest('article').remove();
-  // console.log("uniqueCardId-before", uniqueCardId)
   deleteCardLocal(uniqueCardId);
-  // remove(this);
 })
 
 function deleteCardLocal(uniqueCardId) {
@@ -104,31 +98,29 @@ $('.search-input').on('keyup', function() {
 
 })
 
-
-// upvote downvote
-
-//upvote
-
-// var guitarPlayingBeatles = beatles.filter(function (beatle) {
-//   return beatle.instruments.indexOf('guitar') !== -1;
-// });
-
-// var qualityCount = 0
-
-$('.card-container').on('click', '.up-vote', function() {
-  var id = $(this).closest('.idea-card').attr('id');
-  var card = $(this).closest('.idea-card');  // Review with James
-  console.log('card', card); // Review with James
-  console.log(id,'cardupvote');
-  if (qualityCount < 2) {
-    qualityCount++;
-    qualityArray[qualityCount];
-    console.log(qualityArray[qualityCount]);
-    console.log($(this).siblings('h5'));
-    var qualityRating = $(this).siblings('h5').text('quality: ' + qualityArray[qualityCount]);
+$('input').on('keyup', function(event){
+  if (event.keyCode === 13) {
+    $('.submit-btn').click();
   }
-  console.log(id);
 })
+
+// Upvote WIP
+
+// $('.card-container').on('click', '.up-vote', function() {
+//   console.log('this', this);
+//   var qualityText = $(this).siblings('h5').children('.quality').text();
+//   console.log('qualitytext',qualityText);
+//   var id = $(this).closest('.idea-card').attr('id');
+//   var card = $(this).closest('.idea-card');  // Review with James
+//   console.log('card', card); // Review with James
+//   var quality = ['swill', 'plausible', 'genius']
+//   for(var i = 0; i < quality.length; i++) {
+//     if (qualityArray[i] == qualityText) {
+//       qualityText = quality[i += 1];
+//       $(this).siblings('h5').children('.quality').text(qualityText);
+//     }
+//   }
+// })
 
 $('.idea-card').on('focusout', function() {
   var titleText = $(this).find('h3').text()
@@ -136,15 +128,10 @@ $('.idea-card').on('focusout', function() {
   var cardId = parseInt(cardIdString)
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
-  console.log("title text", titleText, "this", this, "cardId", cardId)
-  // console.log(this, 'this')
-  // console.log('cardId', cardId)
   $(parsedCardList)
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
-      console.log("card", object)
-      console.log("object title", object.title)
     }
     localStorage.setItem('cardlist', JSON.stringify(cardArray) )
   })
@@ -156,20 +143,11 @@ $('.idea-card').on('focusout', function() {
   var cardId = parseInt(cardIdString)
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
-  console.log('bodyText', bodyText)
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.idea = bodyText;
-      console.log("index",index)
-      console.log("object", object)
-      console.log("idea title", object.idea)
+
     }
     localStorage.setItem('cardlist', JSON.stringify(cardArray) )
   })
-})
-
-//downvote
-
-$('card-container').on('click', 'down-vote', function() {
-
 })
