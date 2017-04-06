@@ -9,11 +9,12 @@ $('.submit-btn').on('click', function(){
 });
 
 function addCard() {
-  // generateID();
   var title = $('.title-input').val();
   var idea = $('.body-input').val();
   var uniqueID = Date.now();
   var card = new Card(title, idea, uniqueID);
+  $('.title-input').val("");
+  $('.body-input').val("");
 }
 
 function Card(title, idea, uniqueID) {
@@ -75,11 +76,10 @@ $('.card-container').on('click', '.delete-btn', function() {
   var uniqueCardIdtoParse = $(this).closest('article').attr('id');
   var uniqueCardId = parseInt(uniqueCardIdtoParse)
   $(this).closest('article').remove();
-  console.log("uniqueCardId-before", uniqueCardId)
+  // console.log("uniqueCardId-before", uniqueCardId)
   deleteCardLocal(uniqueCardId);
   // remove(this);
 })
-
 
 function deleteCardLocal(uniqueCardId) {
   var cardID = uniqueCardId
@@ -113,11 +113,11 @@ $('.search-input').on('keyup', function() {
 //   return beatle.instruments.indexOf('guitar') !== -1;
 // });
 
-var qualityCount = 0
+// var qualityCount = 0
 
 $('.card-container').on('click', '.up-vote', function() {
   var id = $(this).closest('.idea-card').attr('id');
-  var card =$(this).closest('.idea-card');  // Review with James
+  var card = $(this).closest('.idea-card');  // Review with James
   console.log('card', card); // Review with James
   console.log(id,'cardupvote');
   if (qualityCount < 2) {
@@ -127,9 +127,45 @@ $('.card-container').on('click', '.up-vote', function() {
     console.log($(this).siblings('h5'));
     var qualityRating = $(this).siblings('h5').text('quality: ' + qualityArray[qualityCount]);
   }
-
-
   console.log(id);
+})
+
+$('.idea-card').on('focusout', function() {
+  var titleText = $(this).find('h3').text()
+  var cardIdString = $(this).attr('id')
+  var cardId = parseInt(cardIdString)
+  var storageList =localStorage.getItem("cardlist");
+  var parsedCardList = JSON.parse(storageList);
+  console.log("title text", titleText, "this", this, "cardId", cardId)
+  // console.log(this, 'this')
+  // console.log('cardId', cardId)
+  $(parsedCardList)
+  cardArray.forEach(function(object, index) {
+    if(cardId == object.uniqueID) {
+      object.title = titleText;
+      console.log("card", object)
+      console.log("object title", object.title)
+    }
+    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+  })
+});
+
+$('.idea-card').on('focusout', function() {
+  var bodyText = $(this).find('p').text()
+  var cardIdString = $(this).attr('id')
+  var cardId = parseInt(cardIdString)
+  var storageList =localStorage.getItem("cardlist");
+  var parsedCardList = JSON.parse(storageList);
+  console.log('bodyText', bodyText)
+  cardArray.forEach(function(object, index) {
+    if(cardId == object.uniqueID) {
+      object.idea = bodyText;
+      console.log("index",index)
+      console.log("object", object)
+      console.log("idea title", object.idea)
+    }
+    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+  })
 })
 
 //downvote
