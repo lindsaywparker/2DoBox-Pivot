@@ -1,12 +1,11 @@
-// var uniqueID;
-// var cardArray = [];
-
 
 fromStorage();
 
-$('.submit-btn').on('click', function(){
-  addCard();
-});
+$('.submit-btn').on('click', addCard);
+
+$('.card-container').on('click', '.delete-btn', deleteCardElement);
+
+$('.search-input').on('keyup', searchResult);
 
 function addCard() {
   var title = $('.title-input').val();
@@ -43,14 +42,16 @@ function fromStorage() {
   // 1: get the list from storage
   var storageList =localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
-  
-  // 2: add cards to the page
+
+  loadCards(parsedCardList);
+}
+
+function loadCards(parsedCardList) {
   if (localStorage.length > 0) {
     cardArray = parsedCardList;
     prependCards(parsedCardList);
   }
 }
-
 
 function prependCards(array) {
   var cardContainer = $('.card-container');
@@ -71,12 +72,12 @@ function prependCards(array) {
 
 // Delete buttons
 
-$('.card-container').on('click', '.delete-btn', function() {
-  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
-  var uniqueCardId = parseInt(uniqueCardIdtoParse)
-  $(this).closest('article').remove();
-  deleteCardLocal(uniqueCardId);
-})
+function deleteCardElement() {
+var uniqueCardIdtoParse = $(this).closest('article').attr('id');
+var uniqueCardId = parseInt(uniqueCardIdtoParse)
+$(this).closest('article').remove();
+deleteCardLocal(uniqueCardId);
+}
 
 function deleteCardLocal(uniqueCardId) {
   var cardID = uniqueCardId
@@ -88,7 +89,7 @@ function deleteCardLocal(uniqueCardId) {
   })
 }
 
-$('.search-input').on('keyup', function() {
+function searchResult() {
     var searchInput = $(this).val().toLowerCase();
     $('.text').each(function() {
       var cardText = $(this).text().toLowerCase();
@@ -98,27 +99,48 @@ $('.search-input').on('keyup', function() {
         $(this).parent().hide();
       }
     })
+}
 
-})
 
 
-$('.idea-card').on('focusout', function() {
-  // get the full list from localStorage
-  
-  
-  // read the html changes
 
-  
-  // get the id of the html element that was changed and make it an integer
-  
-  
-  // cycle through the cardArray to find the right card, update that card
 
-  
-  // update localStorage  
-  
-  
-  
-});
 
-// BUG: editable content does not persist on first change
+//
+// $('.idea-card').on('focusout', function() {
+//   var titleText = $(this).find('h3').text()
+//   var bodyText = $(this).find('p').text()
+//   var cardIdString = $(this).attr('id')
+//   var cardId = parseInt(cardIdString)
+//   var storageList =localStorage.getItem("cardlist");
+//   var parsedCardList = JSON.parse(storageList);
+//   $(parsedCardList)
+//   cardArray.forEach(function(object, index) {
+//     if(cardId == object.uniqueID) {
+//       object.title = titleText;
+//       object.idea = bodyText;
+//     }
+//   })
+//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+// });
+
+//
+// $('.idea-card').on('focusout', function() {
+//     var titleText = $(this).find('h3').text()
+//     var bodyText = $(this).find('p').text()
+//     var cardIdString = $(this).attr('id')
+//     var cardId = parseInt(cardIdString)
+//     cardArray.forEach(function(object, index) {
+//       if(cardId == object.uniqueID) {
+//         object.title = titleText;
+//         object.idea = bodyText;
+//       })
+//     })
+//     refreshStorage()
+//   })
+//
+// function refreshStorage () {
+//   var storageList =localStorage.getItem("cardlist");
+//   var parsedCardList = JSON.parse(storageList);
+//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+// }
