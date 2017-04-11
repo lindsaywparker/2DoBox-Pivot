@@ -1,5 +1,5 @@
 // var uniqueID;
-var cardArray = [];
+// var cardArray = [];
 
 
 fromStorage();
@@ -13,8 +13,8 @@ function addCard() {
   var idea = $('.body-input').val();
   var uniqueID = Date.now();
   var card = new Card(title, idea, uniqueID);
-  $('.title-input').val("");
-  $('.body-input').val("");
+  $('.title-input').val('');
+  $('.body-input').val('');
 }
 
 function Card(title, idea, uniqueID) {
@@ -33,20 +33,23 @@ function stringifyArray() {
   toStorage(cardArrayStringify);
 }
 
-
-
 function toStorage(array) {
-  var tempStore = localStorage.setItem( "cardlist",array);
+  var tempStore = localStorage.setItem('cardlist',array);
   fromStorage();
 }
 
 function fromStorage() {
-  var storageList =localStorage.getItem("cardlist");
+  // This functions has two purposes:
+  // 1: get the list from storage
+  var storageList =localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
+  
+  // 2: add cards to the page
   if (localStorage.length > 0) {
-  cardArray = parsedCardList;
-  prependCards(parsedCardList);
-}}
+    cardArray = parsedCardList;
+    prependCards(parsedCardList);
+  }
+}
 
 
 function prependCards(array) {
@@ -54,15 +57,15 @@ function prependCards(array) {
   cardContainer.html('');
   array.forEach(function(card){
   cardContainer.prepend(
-      `<article class="idea-card" id=${card.uniqueID}>
-        <div class="text">
-          <h3 class="card-title" contenteditable="true">${card.title}</h3>
-          <button class="delete-btn card-btns"></button>
-          <p class="card-idea" contenteditable="true">${card.idea}</p>
+      `<article class='idea-card' id=${card.uniqueID}>
+        <div class='text'>
+          <h3 class='card-title' contenteditable='true'>${card.title}</h3>
+          <button class='delete-btn card-btns'></button>
+          <p class='card-idea' contenteditable='true'>${card.idea}</p>
         </div>
-        <button class="up-vote card-btns"></button>
-        <button class="down-vote card-btns"></button>
-        <h5>quality: <span class="quality">${card.quality}</h5></span>
+        <button class='up-vote card-btns'></button>
+        <button class='down-vote card-btns'></button>
+        <h5>quality: <span class='quality'>${card.quality}</h5></span>
       </article>`
   )})}
 
@@ -98,56 +101,24 @@ $('.search-input').on('keyup', function() {
 
 })
 
-$('input').on('keyup', function(event){
-  if (event.keyCode === 13) {
-    $('.submit-btn').click();
-  }
-})
-
-// Upvote WIP
-
-// $('.card-container').on('click', '.up-vote', function() {
-//   console.log('this', this);
-//   var qualityText = $(this).siblings('h5').children('.quality').text();
-//   console.log('qualitytext',qualityText);
-//   var id = $(this).closest('.idea-card').attr('id');
-//   var card = $(this).closest('.idea-card');  // Review with James
-//   console.log('card', card); // Review with James
-//   var quality = ['swill', 'plausible', 'genius']
-//   for(var i = 0; i < quality.length; i++) {
-//     if (qualityArray[i] == qualityText) {
-//       qualityText = quality[i += 1];
-//       $(this).siblings('h5').children('.quality').text(qualityText);
-//     }
-//   }
-// })
 
 $('.idea-card').on('focusout', function() {
-  var titleText = $(this).find('h3').text()
-  var bodyText = $(this).find('p').text()
-  var cardIdString = $(this).attr('id')
-  var cardId = parseInt(cardIdString)
-  var storageList =localStorage.getItem("cardlist");
-  var parsedCardList = JSON.parse(storageList);
-  $(parsedCardList)
-  cardArray.forEach(function(object, index) {
-    if(cardId == object.uniqueID) {
-      object.title = titleText;
-      object.idea = bodyText;
-    }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
+  // get the full list from localStorage
+  
+  
+  // read the html changes
+
+  
+  // get the id of the html element that was changed and make it an integer
+  
+  
+  // cycle through the cardArray to find the right card, update that card
+
+  
+  // update localStorage  
+  
+  
+  
 });
 
-$('.idea-card').on('focusout', function() {
-  var cardIdString = $(this).attr('id')
-  var cardId = parseInt(cardIdString)
-  var storageList =localStorage.getItem("cardlist");
-  var parsedCardList = JSON.parse(storageList);
-  cardArray.forEach(function(object, index) {
-    if(cardId == object.uniqueID) {
-
-    }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
-})
+// BUG: editable content does not persist on first change
