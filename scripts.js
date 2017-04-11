@@ -1,12 +1,11 @@
-var uniqueID;
-var cardArray = [];
-
 
 fromStorage();
 
-$('.submit-btn').on('click', function(){
-  addCard();
-});
+$('.submit-btn').on('click', addCard);
+
+$('.card-container').on('click', '.delete-btn', deleteCardElement);
+
+$('.search-input').on('keyup', searchResult);
 
 function addCard() {
   var title = $('.title-input').val();
@@ -33,8 +32,6 @@ function stringifyArray() {
   toStorage(cardArrayStringify);
 }
 
-
-
 function toStorage(array) {
   var tempStore = localStorage.setItem( "cardlist",array);
   fromStorage();
@@ -43,11 +40,14 @@ function toStorage(array) {
 function fromStorage() {
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
+  loadCards(parsedCardList);
+}
+
+function loadCards(parsedCardList) {
   if (localStorage.length > 0) {
   cardArray = parsedCardList;
   prependCards(parsedCardList);
 }}
-
 
 function prependCards(array) {
   var cardContainer = $('.card-container');
@@ -68,12 +68,12 @@ function prependCards(array) {
 
 // Delete buttons
 
-$('.card-container').on('click', '.delete-btn', function() {
-  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
-  var uniqueCardId = parseInt(uniqueCardIdtoParse)
-  $(this).closest('article').remove();
-  deleteCardLocal(uniqueCardId);
-})
+function deleteCardElement() {
+var uniqueCardIdtoParse = $(this).closest('article').attr('id');
+var uniqueCardId = parseInt(uniqueCardIdtoParse)
+$(this).closest('article').remove();
+deleteCardLocal(uniqueCardId);
+}
 
 function deleteCardLocal(uniqueCardId) {
   var cardID = uniqueCardId
@@ -85,7 +85,7 @@ function deleteCardLocal(uniqueCardId) {
   })
 }
 
-$('.search-input').on('keyup', function() {
+function searchResult() {
     var searchInput = $(this).val().toLowerCase();
     $('.text').each(function() {
       var cardText = $(this).text().toLowerCase();
@@ -95,59 +95,47 @@ $('.search-input').on('keyup', function() {
         $(this).parent().hide();
       }
     })
+}
 
-})
 
-$('input').on('keyup', function(event){
-  if (event.keyCode === 13) {
-    $('.submit-btn').click();
-  }
-})
 
-// Upvote WIP
 
-// $('.card-container').on('click', '.up-vote', function() {
-//   console.log('this', this);
-//   var qualityText = $(this).siblings('h5').children('.quality').text();
-//   console.log('qualitytext',qualityText);
-//   var id = $(this).closest('.idea-card').attr('id');
-//   var card = $(this).closest('.idea-card');  // Review with James
-//   console.log('card', card); // Review with James
-//   var quality = ['swill', 'plausible', 'genius']
-//   for(var i = 0; i < quality.length; i++) {
-//     if (qualityArray[i] == qualityText) {
-//       qualityText = quality[i += 1];
-//       $(this).siblings('h5').children('.quality').text(qualityText);
+
+//
+// $('.idea-card').on('focusout', function() {
+//   var titleText = $(this).find('h3').text()
+//   var bodyText = $(this).find('p').text()
+//   var cardIdString = $(this).attr('id')
+//   var cardId = parseInt(cardIdString)
+//   var storageList =localStorage.getItem("cardlist");
+//   var parsedCardList = JSON.parse(storageList);
+//   $(parsedCardList)
+//   cardArray.forEach(function(object, index) {
+//     if(cardId == object.uniqueID) {
+//       object.title = titleText;
+//       object.idea = bodyText;
 //     }
-//   }
-// })
+//   })
+//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+// });
 
-$('.idea-card').on('focusout', function() {
-  var titleText = $(this).find('h3').text()
-  var cardIdString = $(this).attr('id')
-  var cardId = parseInt(cardIdString)
-  var storageList =localStorage.getItem("cardlist");
-  var parsedCardList = JSON.parse(storageList);
-  $(parsedCardList)
-  cardArray.forEach(function(object, index) {
-    if(cardId == object.uniqueID) {
-      object.title = titleText;
-    }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
-});
-
-$('.idea-card').on('focusout', function() {
-  var bodyText = $(this).find('p').text()
-  var cardIdString = $(this).attr('id')
-  var cardId = parseInt(cardIdString)
-  var storageList =localStorage.getItem("cardlist");
-  var parsedCardList = JSON.parse(storageList);
-  cardArray.forEach(function(object, index) {
-    if(cardId == object.uniqueID) {
-      object.idea = bodyText;
-
-    }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
-})
+//
+// $('.idea-card').on('focusout', function() {
+//     var titleText = $(this).find('h3').text()
+//     var bodyText = $(this).find('p').text()
+//     var cardIdString = $(this).attr('id')
+//     var cardId = parseInt(cardIdString)
+//     cardArray.forEach(function(object, index) {
+//       if(cardId == object.uniqueID) {
+//         object.title = titleText;
+//         object.idea = bodyText;
+//       })
+//     })
+//     refreshStorage()
+//   })
+//
+// function refreshStorage () {
+//   var storageList =localStorage.getItem("cardlist");
+//   var parsedCardList = JSON.parse(storageList);
+//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+// }

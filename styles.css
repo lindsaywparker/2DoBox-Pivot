@@ -1,16 +1,17 @@
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
   margin: 0;
 }
 
+/*body*/
+
 body {
   color: #6d6E71;
   font-family: 'Open Sans', sans-serif;
-  height: 100%;
   width: 100%;
 }
+
+/*header*/
 
 header {
   background-color: #E5F3F2;
@@ -23,7 +24,11 @@ h1 {
   color: #00A79D;
   font-family: 'Roboto Slab', serif;
   font-size: 45px;
-  margin: 0px 0px 30px 0px;
+  margin: 0 0 30px 0;
+}
+
+span {
+  color: #6D6E71;
 }
 
 input {
@@ -33,6 +38,7 @@ input {
   height: 30px;
   margin-bottom: 20px;
   width: 100%;
+  padding-left: 5px;
 }
 
 button {
@@ -41,26 +47,28 @@ button {
   color: #FFF;
   font-size: 16px;
   height: 30px;
-  margin: 0px;
+  margin: 0;
   width: 100%;
 }
 
-button:hover {
+.submit-btn:hover {
   background-color: #045E55;
 }
 
 .card-container,
-.input-container {
+.input-container,
+.search-input {
   width: 50vw;
-  margin: 0px auto;
+  margin: 0 auto;
 }
+
+/*main*/
 
 .search-input {
   margin: 30px auto;
-  width: 50vw;
 }
 
-/*Card*/
+/*card*/
 
 h3 {
   display: inline-block;
@@ -75,10 +83,6 @@ h5 {
 
 p {
   margin-bottom: 10px;
-}
-
-span {
-  color: #6D6E71;
 }
 
 .idea-card {
@@ -124,14 +128,9 @@ span {
   background-image: url("Assets/downvote-hover.svg");
 }
 
-.delete-btn:hover,
-.up-vote:hover,
-.down-vote:hover {
-  background-color: inherit;
-}
+/*media max 720*/
 
 @media screen and (max-width: 720px) {
-
   .search-input,
   .card-container,
   .input-container {
@@ -139,12 +138,12 @@ span {
   }
 }
 
-@media screen and (max-width: 620px) {
+/*media max 620*/
 
+@media screen and (max-width: 620px) {
   .search-input,
   .card-container,
   .input-container {
     width: 70vw;
   }
-
 }
