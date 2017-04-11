@@ -1,4 +1,4 @@
-var uniqueID;
+// var uniqueID;
 var cardArray = [];
 
 
@@ -124,6 +124,7 @@ $('input').on('keyup', function(event){
 
 $('.idea-card').on('focusout', function() {
   var titleText = $(this).find('h3').text()
+  var bodyText = $(this).find('p').text()
   var cardIdString = $(this).attr('id')
   var cardId = parseInt(cardIdString)
   var storageList =localStorage.getItem("cardlist");
@@ -132,20 +133,19 @@ $('.idea-card').on('focusout', function() {
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
+      object.idea = bodyText;
     }
     localStorage.setItem('cardlist', JSON.stringify(cardArray) )
   })
 });
 
 $('.idea-card').on('focusout', function() {
-  var bodyText = $(this).find('p').text()
   var cardIdString = $(this).attr('id')
   var cardId = parseInt(cardIdString)
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
-      object.idea = bodyText;
 
     }
     localStorage.setItem('cardlist', JSON.stringify(cardArray) )
