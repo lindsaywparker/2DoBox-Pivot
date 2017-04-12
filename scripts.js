@@ -1,7 +1,6 @@
 // setup
 fromStorage();
 
-
 // event listeners
 $('.submit-btn').on('click', addCard);
 
@@ -9,8 +8,8 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement);
 
 $('.search-input').on('keyup', searchResult);
 
-$('.idea-card').on('focusout', editText);
-
+$('.card-container').on('focusout', '.idea-card', editText)
+                    .on('keyup', '.idea-card', blurOnEnter);
 
 // functions
 function addCard() {
@@ -120,4 +119,11 @@ function refreshStorage () {
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+}
+
+function blurOnEnter(e) {
+  var key = e.which;
+  if (key === 13) {
+    e.target.blur();
+  }
 }
