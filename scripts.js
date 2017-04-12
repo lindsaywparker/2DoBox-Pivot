@@ -1,5 +1,6 @@
 // setup
 fromStorage();
+disableSave();
 
 // event listeners
 $('.submit-btn').on('click', addCard);
@@ -8,8 +9,14 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement);
 
 $('.search-input').on('keyup', searchResult);
 
+
 $('.card-container').on('focusout', '.idea-card', editText)
                     .on('keyup', '.idea-card', blurOnEnter);
+
+
+$('.title-input, .body-input').on('keyup', disableSave);
+
+
 
 // functions
 function addCard() {
@@ -19,6 +26,7 @@ function addCard() {
   var card = new Card(title, idea, uniqueID);
   $('.title-input').val('');
   $('.body-input').val('');
+  disableSave();
 }
 
 function Card(title, idea, uniqueID) {
@@ -126,4 +134,10 @@ function blurOnEnter(e) {
   if (key === 13) {
     e.target.blur();
   }
+
+function disableSave () {
+  var emptyTitle = ($('.title-input').val() === '');
+  var emptyBody = ($('.body-input').val() === '');
+  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+
 }
