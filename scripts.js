@@ -3,11 +3,11 @@ fromStorage();
 disableSave();
 
 // event listeners
-$('.title-input, .body-input').on('keyup', disableSave);
+$('.title-input, .task-input').on('keyup', disableSave);
 
 $('.submit-btn').on('click', addCard);
 
-$('.search-input').on('keyup', searchResult);
+$('.filter-input').on('keyup', searchResult);
 
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.idea-card', editText)
@@ -16,11 +16,11 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
 // functions
 function addCard() {
   var title = $('.title-input').val();
-  var idea = $('.body-input').val();
+  var idea = $('.task-input').val();
   var uniqueID = Date.now();
   var card = new Card(title, idea, uniqueID);
   $('.title-input').val('');
-  $('.body-input').val('');
+  $('.task-input').val('');
   disableSave();
 }
 
@@ -133,6 +133,6 @@ function blurOnEnter(e) {
 
 function disableSave () {
   var emptyTitle = ($('.title-input').val() === '');
-  var emptyBody = ($('.body-input').val() === '');
+  var emptyBody = ($('.task-input').val() === '');
   $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
 }

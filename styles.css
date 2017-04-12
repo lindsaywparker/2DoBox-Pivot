@@ -62,14 +62,14 @@ button {
 
 .card-container,
 .input-container,
-.search-input {
+.filter-input {
   width: 50vw;
   margin: 0 auto;
 }
 
 /* main */
 
-.search-input {
+.filter-input {
   border: 1px solid #D1D3D4;
   margin: 30px auto;
 }
@@ -137,7 +137,7 @@ p {
 /* media max 720 */
 
 @media screen and (max-width: 720px) {
-  .search-input,
+  .filter-input,
   .card-container,
   .input-container {
     width: 60vw;
@@ -147,7 +147,7 @@ p {
 /* media max 620 */
 
 @media screen and (max-width: 620px) {
-  .search-input,
+  .filter-input,
   .card-container,
   .input-container {
     width: 70vw;
