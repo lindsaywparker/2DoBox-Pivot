@@ -117,7 +117,7 @@ function editText() {
 }
 
 function refreshStorage () {
-  var storageList =localStorage.getItem("cardlist");
+  var storageList =localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
 }
