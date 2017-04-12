@@ -32,7 +32,7 @@ function Card(title, idea, uniqueID) {
   this.idea = idea;
   this.uniqueID = uniqueID;
 
-  this.quality = "None"
+  this.importance = "Normal"
 
   this.completed = false;
 
@@ -46,67 +46,41 @@ function Card(title, idea, uniqueID) {
 ========================================*/
 
 $('.card-container').on("click", '#up-vote', function() {
-	var id = $(this).closest('article').attr('id');
-  console.log(id)
-	var newObject = grabObject(id)
-	var parshedQuality = grabObject(id).quality
+  var id = $(this).closest('article').attr('id');
+  var existingImp = $(this).next().next().children()[0].innerText
 
-	if (parshedQuality == 'None') {
-		newObject.quality ='Low'
-		$(this).siblings().last().text('Low')
-		toStorage(id, newObject)
+	if (existingImp == 'None') {
+      $(this).next().next().children().text('Low')
 
-	} else if (parshedQuality == 'Low') {
-		newObject.quality = 'Normal'
-		$(this).siblings().last().text('Normal')
-		toStorage(id, newObject)
+	} else if (existingImp == 'Low') {
+      $(this).next().next().children().text('Normal')
 
-	} else if (parshedQuality == 'Normal') {
-		newObject.quality = 'High'
-		$(this).siblings().last().text('High')
-		toStorage(id, newObject)
+	} else if (existingImp == 'Normal') {
+      $(this).next().next().children().text('High')
 
-	} else if (parshedQuality == 'High') {
-		newObject.quality = 'Critical'
-		$(this).siblings().last().text('Critical')
-		toStorage(id, newObject)
+	} else if (existingImp == 'High') {
+      $(this).next().next().children().text('Critical')
 	}
 })
 
 $('.card-container').on("click", '#down-vote', function() {
 	var id = $(this).closest('article').attr('id');
-  	console.log(id)
-	var newObject = fromStorage(id)
-	console.log(newObject)
-	var parshedQuality = fromStorage('id').quality
-  console.log(parshedQuality)
+  var existingImp = $(this).next().children()[0].innerText
 
-  if (parshedQuality == 'Critical') {
-    newObject.quality ='High'
-    $(this).siblings().last().text('High')
-    toStorage(id, newObject)
+  if (existingImp == 'Critical') {
+    $(this).next().children().text('High')
 
-  } else if (parshedQuality == 'High') {
-    newObject.quality = 'Normal'
-    $(this).siblings().last().text('Normal')
-    toStorage(id, newObject)
+  } else if (existingImp == 'High') {
+    $(this).next().children().text('Normal')
 
-  } else if (parshedQuality == 'Normal') {
-    newObject.quality = 'Low'
-    $(this).siblings().last().text('Low')
-    toStorage(id, newObject)
+  } else if (existingImp == 'Normal') {
+    $(this).next().children().text('Low')
 
-  } else if (parshedQuality == 'Low') {
-    newObject.quality = 'None'
-    $(this).siblings().last().text('None')
-    toStorage(id, newObject)
+  } else if (existingImp == 'Low') {
+    $(this).next().children().text('None')
   }
+  
 })
-
-function grabObject(id) {
-	var parsedObject = JSON.parse(localStorage.getItem('id'))
-	return parsedObject;
-}
 
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
@@ -152,7 +126,7 @@ function prependCards(array) {
       <div class='card-footer'>
         <button class='up-vote card-btns' id='up-vote'></button>
         <button class='down-vote card-btns' id='down-vote'></button>
-        <h5>quality: <span class='quality'>${card.quality}</h5></span>
+        <h5>importance: <span class='importance'>${card.importance}</h5></span>
       </div>
       <button class='completed-btn'>completed task</button>
     </article>`
