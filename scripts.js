@@ -11,7 +11,8 @@ $('.filter-input').on('keyup', searchResult);
 
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.idea-card', editText)
-                    .on('keyup', '.idea-card', blurOnEnter);
+                    .on('keyup', '.idea-card', blurOnEnter)
+                    .on('click', '.completed-btn', markCompleted);
 
 // functions
 function addCard() {
@@ -30,6 +31,7 @@ function Card(title, idea, uniqueID) {
   this.uniqueID = uniqueID;
   this.qualityArray = ['swill', 'plausible', 'genius']
   this.quality = this.qualityArray[0];
+  this.completed = false;
   cardArray.push(this);
   qualityCount = 0;
   stringifyArray();
@@ -46,9 +48,12 @@ function toStorage(array) {
 }
 
 function fromStorage() {
-  var storageList =localStorage.getItem('cardlist');
+  var storageList = localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
-  loadCards(parsedCardList);
+  var pendingCardList = parsedCardList.filter(function(card) {
+    return !card.completed;
+  });
+  loadCards(pendingCardList);
 }
 
 function loadCards(parsedCardList) {
@@ -69,9 +74,12 @@ function prependCards(array) {
         <button class='delete-btn card-btns'></button>
         <p class='card-idea' contenteditable='true'>${card.idea}</p>
       </div>
-      <button class='up-vote card-btns'></button>
-      <button class='down-vote card-btns'></button>
-      <h5>quality: <span class='quality'>${card.quality}</h5></span>
+      <div class='card-footer'>
+        <button class='up-vote card-btns'></button>
+        <button class='down-vote card-btns'></button>
+        <h5>quality: <span class='quality'>${card.quality}</h5></span>
+      </div>
+      <button class='completed-btn'>completed task</button>
     </article>`
   )}
 )}
@@ -109,17 +117,19 @@ function editText() {
   var titleText = $(this).find('h3').text();
   var bodyText = $(this).find('p').text();
   var cardId = parseInt($(this).attr('id'));
+  var completedState = $(this).hasClass('completed-active');
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
       object.idea = bodyText;
+      object.completed = completedState;
     }
   });
   refreshStorage();
 }
 
 function refreshStorage () {
-  var storageList =localStorage.getItem('cardlist');
+  var storageList = localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
 }
@@ -135,4 +145,10 @@ function disableSave () {
   var emptyTitle = ($('.title-input').val() === '');
   var emptyBody = ($('.task-input').val() === '');
   $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+}
+
+function markCompleted() {
+  $(this).parent().toggleClass('completed-active');
+  editText();
+  $(this).blur();
 }
