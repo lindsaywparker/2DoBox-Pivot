@@ -1,5 +1,6 @@
 // setup
 fromStorage();
+disableSave();
 
 
 // event listeners
@@ -11,6 +12,8 @@ $('.search-input').on('keyup', searchResult);
 
 $('.idea-card').on('focusout', editText);
 
+$('.title-input, .body-input').on('keyup', disableSave);
+
 
 // functions
 function addCard() {
@@ -20,6 +23,7 @@ function addCard() {
   var card = new Card(title, idea, uniqueID);
   $('.title-input').val('');
   $('.body-input').val('');
+  disableSave();
 }
 
 function Card(title, idea, uniqueID) {
@@ -120,4 +124,10 @@ function refreshStorage () {
   var storageList =localStorage.getItem("cardlist");
   var parsedCardList = JSON.parse(storageList);
   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+}
+
+function disableSave () {
+  var emptyTitle = ($('.title-input').val() === '');
+  var emptyBody = ($('.body-input').val() === '');
+  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
 }
