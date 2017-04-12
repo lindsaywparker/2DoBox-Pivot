@@ -1,12 +1,18 @@
-
+// setup
 fromStorage();
 
+
+// event listeners
 $('.submit-btn').on('click', addCard);
 
 $('.card-container').on('click', '.delete-btn', deleteCardElement);
 
 $('.search-input').on('keyup', searchResult);
 
+$('.idea-card').on('focusout', editText);
+
+
+// functions
 function addCard() {
   var title = $('.title-input').val();
   var idea = $('.body-input').val();
@@ -38,11 +44,8 @@ function toStorage(array) {
 }
 
 function fromStorage() {
-  // This functions has two purposes:
-  // 1: get the list from storage
   var storageList =localStorage.getItem('cardlist');
   var parsedCardList = JSON.parse(storageList);
-
   loadCards(parsedCardList);
 }
 
@@ -58,25 +61,24 @@ function prependCards(array) {
   cardContainer.html('');
   array.forEach(function(card){
   cardContainer.prepend(
-      `<article class='idea-card' id=${card.uniqueID}>
-        <div class='text'>
-          <h3 class='card-title' contenteditable='true'>${card.title}</h3>
-          <button class='delete-btn card-btns'></button>
-          <p class='card-idea' contenteditable='true'>${card.idea}</p>
-        </div>
-        <button class='up-vote card-btns'></button>
-        <button class='down-vote card-btns'></button>
-        <h5>quality: <span class='quality'>${card.quality}</h5></span>
-      </article>`
-  )})}
-
-// Delete buttons
+    `<article class='idea-card' id=${card.uniqueID}>
+      <div class='text'>
+        <h3 class='card-title' contenteditable='true'>${card.title}</h3>
+        <button class='delete-btn card-btns'></button>
+        <p class='card-idea' contenteditable='true'>${card.idea}</p>
+      </div>
+      <button class='up-vote card-btns'></button>
+      <button class='down-vote card-btns'></button>
+      <h5>quality: <span class='quality'>${card.quality}</h5></span>
+    </article>`
+  )}
+)}
 
 function deleteCardElement() {
-var uniqueCardIdtoParse = $(this).closest('article').attr('id');
-var uniqueCardId = parseInt(uniqueCardIdtoParse)
-$(this).closest('article').remove();
-deleteCardLocal(uniqueCardId);
+  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
+  var uniqueCardId = parseInt(uniqueCardIdtoParse)
+  $(this).closest('article').remove();
+  deleteCardLocal(uniqueCardId);
 }
 
 function deleteCardLocal(uniqueCardId) {
@@ -90,57 +92,32 @@ function deleteCardLocal(uniqueCardId) {
 }
 
 function searchResult() {
-    var searchInput = $(this).val().toLowerCase();
-    $('.text').each(function() {
-      var cardText = $(this).text().toLowerCase();
-      if (cardText.indexOf(searchInput) != -1) {
-        $(this).parent().show();
-      } else {
-        $(this).parent().hide();
-      }
-    })
+  var searchInput = $(this).val().toLowerCase();
+  $('.text').each(function() {
+    var cardText = $(this).text().toLowerCase();
+    if (cardText.indexOf(searchInput) != -1) {
+      $(this).parent().show();
+    } else {
+      $(this).parent().hide();
+    }
+  })
 }
 
+function editText() {
+  var titleText = $(this).find('h3').text();
+  var bodyText = $(this).find('p').text();
+  var cardId = parseInt($(this).attr('id'));
+  cardArray.forEach(function(object, index) {
+    if(cardId == object.uniqueID) {
+      object.title = titleText;
+      object.idea = bodyText;
+    }
+  });
+  refreshStorage();
+}
 
-
-
-
-
-//
-// $('.idea-card').on('focusout', function() {
-//   var titleText = $(this).find('h3').text()
-//   var bodyText = $(this).find('p').text()
-//   var cardIdString = $(this).attr('id')
-//   var cardId = parseInt(cardIdString)
-//   var storageList =localStorage.getItem("cardlist");
-//   var parsedCardList = JSON.parse(storageList);
-//   $(parsedCardList)
-//   cardArray.forEach(function(object, index) {
-//     if(cardId == object.uniqueID) {
-//       object.title = titleText;
-//       object.idea = bodyText;
-//     }
-//   })
-//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-// });
-
-//
-// $('.idea-card').on('focusout', function() {
-//     var titleText = $(this).find('h3').text()
-//     var bodyText = $(this).find('p').text()
-//     var cardIdString = $(this).attr('id')
-//     var cardId = parseInt(cardIdString)
-//     cardArray.forEach(function(object, index) {
-//       if(cardId == object.uniqueID) {
-//         object.title = titleText;
-//         object.idea = bodyText;
-//       })
-//     })
-//     refreshStorage()
-//   })
-//
-// function refreshStorage () {
-//   var storageList =localStorage.getItem("cardlist");
-//   var parsedCardList = JSON.parse(storageList);
-//   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-// }
+function refreshStorage () {
+  var storageList =localStorage.getItem("cardlist");
+  var parsedCardList = JSON.parse(storageList);
+  localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+}
