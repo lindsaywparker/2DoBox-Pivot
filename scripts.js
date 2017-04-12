@@ -31,13 +31,56 @@ function Card(title, idea, uniqueID) {
   this.title = title;
   this.idea = idea;
   this.uniqueID = uniqueID;
-  this.qualityArray = ['swill', 'plausible', 'genius']
-  this.quality = this.qualityArray[0];
+
+  this.importance = "Normal"
+
   this.completed = false;
+
   cardArray.push(this);
-  qualityCount = 0;
+  // qualityCount = 0;
   stringifyArray();
 }
+
+/*=======================================
+>>>>>>>>  on click do this  <<<<<<<<
+========================================*/
+
+$('.card-container').on("click", '#up-vote', function() {
+  var id = $(this).closest('article').attr('id');
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+
+	if (existingImp == 'None') {
+      $(this).siblings('.imp-container').children().text('Low')
+
+	} else if (existingImp == 'Low') {
+      $(this).siblings('.imp-container').children().text('Normal')
+
+	} else if (existingImp == 'Normal') {
+      $(this).siblings('.imp-container').children().text('High')
+
+	} else if (existingImp == 'High') {
+      $(this).siblings('.imp-container').children().text('Critical')
+	}
+})
+
+$('.card-container').on("click", '#down-vote', function() {
+	var id = $(this).closest('article').attr('id');
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+
+  if (existingImp == 'Critical') {
+    $(this).siblings('.imp-container').children().text('High')
+
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Normal')
+
+  } else if (existingImp == 'Normal') {
+    $(this).siblings('.imp-container').children().text('Low')
+
+  } else if (existingImp == 'Low') {
+    $(this).siblings('.imp-container').children().text('None')
+  }
+
+})
 
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
@@ -73,6 +116,7 @@ function prependCards(array) {
       var completedClass = 'completed-active';
     }
   cardContainer.prepend(
+
     `<article class='idea-card ${completedClass}' id=${card.uniqueID}>
       <div class='text'>
         <h3 class='card-title' contenteditable='true'>${card.title}</h3>
@@ -80,9 +124,11 @@ function prependCards(array) {
         <p class='card-idea' contenteditable='true'>${card.idea}</p>
       </div>
       <div class='card-footer'>
-        <button class='up-vote card-btns'></button>
-        <button class='down-vote card-btns'></button>
-        <h5>quality: <span class='quality'>${card.quality}</h5></span>
+        <button class='up-vote card-btns' id='up-vote'></button>
+        <button class='down-vote card-btns' id='down-vote'></button>
+        <h5 class='imp-container'>importance:
+          <span class='importance'>${card.importance}</span>
+        </h5>
       </div>
       <button class='completed-btn'>completed task</button>
     </article>`
