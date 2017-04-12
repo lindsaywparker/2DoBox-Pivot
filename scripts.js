@@ -47,39 +47,39 @@ function Card(title, idea, uniqueID) {
 
 $('.card-container').on("click", '#up-vote', function() {
   var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).next().next().children()[0].innerText
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
 
 	if (existingImp == 'None') {
-      $(this).next().next().children().text('Low')
+      $(this).siblings('.imp-container').children().text('Low')
 
 	} else if (existingImp == 'Low') {
-      $(this).next().next().children().text('Normal')
+      $(this).siblings('.imp-container').children().text('Normal')
 
 	} else if (existingImp == 'Normal') {
-      $(this).next().next().children().text('High')
+      $(this).siblings('.imp-container').children().text('High')
 
 	} else if (existingImp == 'High') {
-      $(this).next().next().children().text('Critical')
+      $(this).siblings('.imp-container').children().text('Critical')
 	}
 })
 
 $('.card-container').on("click", '#down-vote', function() {
 	var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).next().children()[0].innerText
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
 
   if (existingImp == 'Critical') {
-    $(this).next().children().text('High')
+    $(this).siblings('.imp-container').children().text('High')
 
   } else if (existingImp == 'High') {
-    $(this).next().children().text('Normal')
+    $(this).siblings('.imp-container').children().text('Normal')
 
   } else if (existingImp == 'Normal') {
-    $(this).next().children().text('Low')
+    $(this).siblings('.imp-container').children().text('Low')
 
   } else if (existingImp == 'Low') {
-    $(this).next().children().text('None')
+    $(this).siblings('.imp-container').children().text('None')
   }
-  
+
 })
 
 function stringifyArray() {
@@ -126,7 +126,9 @@ function prependCards(array) {
       <div class='card-footer'>
         <button class='up-vote card-btns' id='up-vote'></button>
         <button class='down-vote card-btns' id='down-vote'></button>
-        <h5>importance: <span class='importance'>${card.importance}</h5></span>
+        <h5 class='imp-container'>importance:
+          <span class='importance'>${card.importance}</span>
+        </h5>
       </div>
       <button class='completed-btn'>completed task</button>
     </article>`
