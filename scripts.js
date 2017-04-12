@@ -14,7 +14,9 @@ $('.show-completed-btn').on('click', showCompleted);
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.idea-card', editText)
                     .on('keyup', '.idea-card', blurOnEnter)
-                    .on('click', '.completed-btn', markCompleted);
+                    .on('click', '.completed-btn', markCompleted)
+                    .on('click', '#up-vote', upImportance)
+                    .on("click", '#down-vote', downImportance);
 
 // functions
 function addCard() {
@@ -31,56 +33,39 @@ function Card(title, idea, uniqueID) {
   this.title = title;
   this.idea = idea;
   this.uniqueID = uniqueID;
-
-  this.importance = "Normal"
-
+  this.importance = 'Normal';
   this.completed = false;
-
   cardArray.push(this);
-  // qualityCount = 0;
   stringifyArray();
 }
 
-/*=======================================
->>>>>>>>  on click do this  <<<<<<<<
-========================================*/
-
-$('.card-container').on("click", '#up-vote', function() {
+function upImportance() {
   var id = $(this).closest('article').attr('id');
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-
-	if (existingImp == 'None') {
-      $(this).siblings('.imp-container').children().text('Low')
-
+  if (existingImp == 'None') {
+    $(this).siblings('.imp-container').children().text('Low')
 	} else if (existingImp == 'Low') {
-      $(this).siblings('.imp-container').children().text('Normal')
-
+    $(this).siblings('.imp-container').children().text('Normal')
 	} else if (existingImp == 'Normal') {
-      $(this).siblings('.imp-container').children().text('High')
-
-	} else if (existingImp == 'High') {
-      $(this).siblings('.imp-container').children().text('Critical')
+    $(this).siblings('.imp-container').children().text('High')
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Critical')
 	}
-})
+}
 
-$('.card-container').on("click", '#down-vote', function() {
+function downImportance() {
 	var id = $(this).closest('article').attr('id');
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-
   if (existingImp == 'Critical') {
     $(this).siblings('.imp-container').children().text('High')
-
   } else if (existingImp == 'High') {
     $(this).siblings('.imp-container').children().text('Normal')
-
   } else if (existingImp == 'Normal') {
     $(this).siblings('.imp-container').children().text('Low')
-
   } else if (existingImp == 'Low') {
     $(this).siblings('.imp-container').children().text('None')
   }
-
-})
+}
 
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
@@ -108,15 +93,18 @@ function loadCards(parsedCardList) {
   }
 }
 
-function prependCards(array) {
+function clearCardDeck() {
   var cardContainer = $('.card-container');
   cardContainer.html('');
+}
+
+function prependCards(array) {
+  clearCardDeck()
   array.forEach(function(card){
-    if (card.completed === true) {
+    if (card.completed) {
       var completedClass = 'completed-active';
     }
-  cardContainer.prepend(
-
+  $('.card-container').prepend(
     `<article class='idea-card ${completedClass}' id=${card.uniqueID}>
       <div class='text'>
         <h3 class='card-title' contenteditable='true'>${card.title}</h3>
