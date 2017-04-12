@@ -20,11 +20,79 @@ function Card(title, idea, uniqueID) {
   this.title = title;
   this.idea = idea;
   this.uniqueID = uniqueID;
-  this.qualityArray = ['swill', 'plausible', 'genius']
-  this.quality = this.qualityArray[0];
+  this.quality = "None"
+  // this.qualityArray = ['swill', 'plausible', 'genius']
+  // this.quality = this.qualityArray[0];
   cardArray.push(this);
-  qualityCount = 0;
+  // qualityCount = 0;
   stringifyArray();
+}
+
+/*=======================================
+>>>>>>>>  on click do this  <<<<<<<<
+========================================*/
+
+$('.card-container').on("click", '#up-vote', function() {
+	var id = $(this).closest('article').attr('id');
+  console.log(id)
+	var newObject = grabObject(id)
+	var parshedQuality = grabObject(id).quality
+
+	if (parshedQuality == 'None') {
+		newObject.quality ='Low'
+		$(this).siblings().last().text('Low')
+		toStorage(id, newObject)
+
+	} else if (parshedQuality == 'Low') {
+		newObject.quality = 'Normal'
+		$(this).siblings().last().text('Normal')
+		toStorage(id, newObject)
+
+	} else if (parshedQuality == 'Normal') {
+		newObject.quality = 'High'
+		$(this).siblings().last().text('High')
+		toStorage(id, newObject)
+
+	} else if (parshedQuality == 'High') {
+		newObject.quality = 'Critical'
+		$(this).siblings().last().text('Critical')
+		toStorage(id, newObject)
+	}
+})
+
+$('.card-container').on("click", '#down-vote', function() {
+	var id = $(this).closest('article').attr('id');
+  	console.log(id)
+	var newObject = fromStorage(id)
+	console.log(newObject)
+	var parshedQuality = fromStorage('id').quality
+  console.log(parshedQuality)
+
+  if (parshedQuality == 'Critical') {
+    newObject.quality ='High'
+    $(this).siblings().last().text('High')
+    toStorage(id, newObject)
+
+  } else if (parshedQuality == 'High') {
+    newObject.quality = 'Normal'
+    $(this).siblings().last().text('Normal')
+    toStorage(id, newObject)
+
+  } else if (parshedQuality == 'Normal') {
+    newObject.quality = 'Low'
+    $(this).siblings().last().text('Low')
+    toStorage(id, newObject)
+
+  } else if (parshedQuality == 'Low') {
+    newObject.quality = 'None'
+    $(this).siblings().last().text('None')
+    toStorage(id, newObject)
+  }
+})
+
+function grabObject(id) {
+	var parsedObject = JSON.parse(localStorage.getItem('id'))
+	return parsedObject;
 }
 
 function stringifyArray() {
@@ -57,11 +125,11 @@ function prependCards(array) {
       `<article class="idea-card" id=${card.uniqueID}>
         <div class="text">
           <h3 class="card-title" contenteditable="true">${card.title}</h3>
-          <button class="delete-btn card-btns"></button>
+          <button class="delete-btn card-btns" role='button'></button>
           <p class="card-idea" contenteditable="true">${card.idea}</p>
         </div>
-        <button class="up-vote card-btns"></button>
-        <button class="down-vote card-btns"></button>
+        <button class="up-vote card-btns" id='up-vote' role='button'></button>
+        <button class="down-vote card-btns" id='down-vote' role='button'></button>
         <h5>quality: <span class="quality">${card.quality}</h5></span>
       </article>`
   )})}
