@@ -74,6 +74,21 @@ input {
   margin: 30px auto;
 }
 
+.show-completed-btn {
+  display: block;
+  border: none;
+  border-radius: 5px;
+  margin: 30px auto;
+  background-color: #F1F1F2;
+  color: #6D6E71;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.show-completed-btn:hover {
+  background-color: #6D6E71;
+  color: #F1F1F2;
+}
+
 /* card */
 
 h3 {

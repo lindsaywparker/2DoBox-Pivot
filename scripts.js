@@ -9,6 +9,8 @@ $('.submit-btn').on('click', addCard);
 
 $('.filter-input').on('keyup', searchResult);
 
+$('.show-completed-btn').on('click', showCompleted);
+
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.idea-card', editText)
                     .on('keyup', '.idea-card', blurOnEnter)
@@ -67,8 +69,11 @@ function prependCards(array) {
   var cardContainer = $('.card-container');
   cardContainer.html('');
   array.forEach(function(card){
+    if (card.completed === true) {
+      var completedClass = 'completed-active';
+    }
   cardContainer.prepend(
-    `<article class='idea-card' id=${card.uniqueID}>
+    `<article class='idea-card ${completedClass}' id=${card.uniqueID}>
       <div class='text'>
         <h3 class='card-title' contenteditable='true'>${card.title}</h3>
         <button class='delete-btn card-btns'></button>
@@ -151,4 +156,15 @@ function markCompleted() {
   $(this).parent().toggleClass('completed-active');
   editText();
   $(this).blur();
+}
+
+function showCompleted() {
+  var storageList = localStorage.getItem('cardlist');
+  var parsedCardList = JSON.parse(storageList);
+  var sortedByCompletedList = parsedCardList.sort(function (a, b) {
+    if (a.completed < b.completed) {return -1}
+    if (a.completed > b.completed) {return  1}
+    return 0;
+  });
+  loadCards(sortedByCompletedList);
 }
