@@ -2,7 +2,6 @@
 fromStorage();
 disableSave();
 
-
 // event listeners
 $('.submit-btn').on('click', addCard);
 
@@ -10,9 +9,13 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement);
 
 $('.search-input').on('keyup', searchResult);
 
-$('.idea-card').on('focusout', editText);
+
+$('.card-container').on('focusout', '.idea-card', editText)
+                    .on('keyup', '.idea-card', blurOnEnter);
+
 
 $('.title-input, .body-input').on('keyup', disableSave);
+
 
 
 // functions
@@ -126,8 +129,15 @@ function refreshStorage () {
   localStorage.setItem('cardlist', JSON.stringify(cardArray) )
 }
 
+function blurOnEnter(e) {
+  var key = e.which;
+  if (key === 13) {
+    e.target.blur();
+  }
+
 function disableSave () {
   var emptyTitle = ($('.title-input').val() === '');
   var emptyBody = ($('.body-input').val() === '');
   $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+
 }
