@@ -19,13 +19,23 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on("click", '#down-vote', downImportance);
 
 // functions
+function emptyInputs() {
+  $('.title-input').val('');
+  $('.task-input').val('');
+}
+
+function disableSave () {
+  var emptyTitle = ($('.title-input').val() === '');
+  var emptyBody = ($('.task-input').val() === '');
+  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+}
+
 function addCard() {
   var title = $('.title-input').val();
   var idea = $('.task-input').val();
   var uniqueID = Date.now();
   var card = new Card(title, idea, uniqueID);
-  $('.title-input').val('');
-  $('.task-input').val('');
+  emptyInputs();
   disableSave();
 }
 
@@ -39,41 +49,13 @@ function Card(title, idea, uniqueID) {
   stringifyArray();
 }
 
-function upImportance() {
-  var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-  if (existingImp == 'None') {
-    $(this).siblings('.imp-container').children().text('Low')
-	} else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('Normal')
-	} else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('High')
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Critical')
-	}
-}
-
-function downImportance() {
-	var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-  if (existingImp == 'Critical') {
-    $(this).siblings('.imp-container').children().text('High')
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Normal')
-  } else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('Low')
-  } else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('None')
-  }
-}
-
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
   toStorage(cardArrayStringify);
 }
 
 function toStorage(array) {
-  var tempStore = localStorage.setItem('cardlist',array);
+  var tempStore = localStorage.setItem('cardlist', array);
   fromStorage();
 }
 
@@ -180,10 +162,30 @@ function blurOnEnter(e) {
   }
 }
 
-function disableSave () {
-  var emptyTitle = ($('.title-input').val() === '');
-  var emptyBody = ($('.task-input').val() === '');
-  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+function upImportance() {
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+  if (existingImp == 'None') {
+    $(this).siblings('.imp-container').children().text('Low')
+	} else if (existingImp == 'Low') {
+    $(this).siblings('.imp-container').children().text('Normal')
+	} else if (existingImp == 'Normal') {
+    $(this).siblings('.imp-container').children().text('High')
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Critical')
+	}
+}
+
+function downImportance() {
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+  if (existingImp == 'Critical') {
+    $(this).siblings('.imp-container').children().text('High')
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Normal')
+  } else if (existingImp == 'Normal') {
+    $(this).siblings('.imp-container').children().text('Low')
+  } else if (existingImp == 'Low') {
+    $(this).siblings('.imp-container').children().text('None')
+  }
 }
 
 function markCompleted() {
