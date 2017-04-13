@@ -19,14 +19,15 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on("click", '#down-vote', downImportance);
 
 // functions
-function addCard() {
-  var title = $('.title-input').val();
-  var idea = $('.task-input').val();
-  var uniqueID = Date.now();
-  var card = new Card(title, idea, uniqueID);
-  $('.title-input').val('');
-  $('.task-input').val('');
-  disableSave();
+function setLocal(array) {
+  localStorage.setItem('cardlist', JSON.stringify(array))  ;
+}
+
+function loadCards(cardList) {
+  if (localStorage.length > 0) {
+    cardArray = cardList;
+    prependCards(cardList);
+  }
 }
 
 function Card(title, idea, uniqueID) {
@@ -36,61 +37,51 @@ function Card(title, idea, uniqueID) {
   this.importance = 'Normal';
   this.completed = false;
   cardArray.push(this);
-  stringifyArray();
+  setLocal(cardArray);
+  loadCards(cardArray);
 }
 
-function upImportance() {
-  var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-  if (existingImp == 'None') {
-    $(this).siblings('.imp-container').children().text('Low')
-	} else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('Normal')
-	} else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('High')
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Critical')
-	}
+function emptyInputs() {
+  $('.title-input').val('');
+  $('.task-input').val('');
 }
 
-function downImportance() {
-	var id = $(this).closest('article').attr('id');
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
-  if (existingImp == 'Critical') {
-    $(this).siblings('.imp-container').children().text('High')
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Normal')
-  } else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('Low')
-  } else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('None')
-  }
+function disableSave () {
+  var emptyTitle = ($('.title-input').val() === '');
+  var emptyBody = ($('.task-input').val() === '');
+  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
 }
 
-function stringifyArray() {
-  cardArrayStringify = JSON.stringify(cardArray);
-  toStorage(cardArrayStringify);
+function addCard() {
+  var title = $('.title-input').val();
+  var idea = $('.task-input').val();
+  var uniqueID = Date.now();
+  var card = new Card(title, idea, uniqueID);
+  emptyInputs();
+  disableSave();
 }
 
-function toStorage(array) {
-  var tempStore = localStorage.setItem('cardlist',array);
-  fromStorage();
+function getLocal() {
+  var storageList = JSON.parse(localStorage.getItem('cardlist'));
+  return storageList;  
 }
 
 function fromStorage() {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  var pendingCardList = parsedCardList.filter(function(card) {
+  var storageList = getLocal();
+  var pendingCardList = storageList.filter(function(card) {
     return !card.completed;
   });
   loadCards(pendingCardList);
 }
 
-function loadCards(parsedCardList) {
-  if (localStorage.length > 0) {
-    cardArray = parsedCardList;
-    prependCards(parsedCardList);
-  }
+function showCompleted() {
+  var storageList = getLocal();
+  var sortedByCompletedList = storageList.sort(function (a, b) {
+    if (a.completed < b.completed) {return -1}
+    if (a.completed > b.completed) {return  1}
+    return 0;
+  });
+  loadCards(sortedByCompletedList);
 }
 
 function clearCardDeck() {
@@ -99,8 +90,8 @@ function clearCardDeck() {
 }
 
 function prependCards(array) {
-  clearCardDeck()
-  array.forEach(function(card){
+  clearCardDeck();
+  array.forEach(function(card) {
     if (card.completed) {
       var completedClass = 'completed-active';
     }
@@ -124,20 +115,19 @@ function prependCards(array) {
 )}
 
 function deleteCardElement() {
-  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
-  var uniqueCardId = parseInt(uniqueCardIdtoParse)
+  var uniqueCardId = $(this).closest('article').attr('id');
   $(this).closest('article').remove();
   deleteCardLocal(uniqueCardId);
 }
 
 function deleteCardLocal(uniqueCardId) {
-  var cardID = uniqueCardId
+  var cardID = parseInt(uniqueCardId);
   cardArray.forEach(function(idea, index) {
-    if(cardID == idea.uniqueID) {
-      cardArray.splice(index, 1)
+    if (cardID === idea.uniqueID) {
+      cardArray.splice(index, 1);
     }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
+    setLocal(cardArray);
+  });
 }
 
 function searchResult() {
@@ -149,7 +139,7 @@ function searchResult() {
     } else {
       $(this).parent().hide();
     }
-  })
+  });
 }
 
 function editText() {
@@ -164,13 +154,7 @@ function editText() {
       object.completed = completedState;
     }
   });
-  refreshStorage();
-}
-
-function refreshStorage () {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+  setLocal(cardArray);
 }
 
 function blurOnEnter(e) {
@@ -180,25 +164,34 @@ function blurOnEnter(e) {
   }
 }
 
-function disableSave () {
-  var emptyTitle = ($('.title-input').val() === '');
-  var emptyBody = ($('.task-input').val() === '');
-  $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+function upImportance() {
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
+  if (existingImp == 'None') {
+    $(this).siblings('.imp-container').children().text('Low');
+	} else if (existingImp == 'Low') {
+    $(this).siblings('.imp-container').children().text('Normal');
+	} else if (existingImp == 'Normal') {
+    $(this).siblings('.imp-container').children().text('High');
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Critical');
+	}
+}
+
+function downImportance() {
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
+  if (existingImp == 'Critical') {
+    $(this).siblings('.imp-container').children().text('High');
+  } else if (existingImp == 'High') {
+    $(this).siblings('.imp-container').children().text('Normal');
+  } else if (existingImp == 'Normal') {
+    $(this).siblings('.imp-container').children().text('Low');
+  } else if (existingImp == 'Low') {
+    $(this).siblings('.imp-container').children().text('None');
+  }
 }
 
 function markCompleted() {
   $(this).parent().toggleClass('completed-active');
-  editText();
   $(this).blur();
-}
-
-function showCompleted() {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  var sortedByCompletedList = parsedCardList.sort(function (a, b) {
-    if (a.completed < b.completed) {return -1}
-    if (a.completed > b.completed) {return  1}
-    return 0;
-  });
-  loadCards(sortedByCompletedList);
+  editText();
 }
