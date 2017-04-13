@@ -19,6 +19,28 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on("click", '#down-vote', downImportance);
 
 // functions
+function setLocal(array) {
+  localStorage.setItem('cardlist', JSON.stringify(array))  ;
+}
+
+function loadCards(cardList) {
+  if (localStorage.length > 0) {
+    cardArray = cardList;
+    prependCards(cardList);
+  }
+}
+
+function Card(title, idea, uniqueID) {
+  this.title = title;
+  this.idea = idea;
+  this.uniqueID = uniqueID;
+  this.importance = 'Normal';
+  this.completed = false;
+  cardArray.push(this);
+  setLocal(cardArray);
+  loadCards(cardArray);
+}
+
 function emptyInputs() {
   $('.title-input').val('');
   $('.task-input').val('');
@@ -39,44 +61,27 @@ function addCard() {
   disableSave();
 }
 
-function Card(title, idea, uniqueID) {
-  this.title = title;
-  this.idea = idea;
-  this.uniqueID = uniqueID;
-  this.importance = 'Normal';
-  this.completed = false;
-  cardArray.push(this);
-  stringifyArray();
-}
-
-function setLocal(array) {
-  localStorage.setItem('cardlist', JSON.stringify(array))  
-}
-
-function stringifyArray() {
-  cardArrayStringify = JSON.stringify(cardArray);
-  toStorage(cardArrayStringify);
-}
-
-function toStorage(array) {
-  var tempStore = localStorage.setItem('cardlist', array);
-  fromStorage();
+function getLocal() {
+  var storageList = JSON.parse(localStorage.getItem('cardlist'));
+  return storageList;  
 }
 
 function fromStorage() {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  var pendingCardList = parsedCardList.filter(function(card) {
+  var storageList = getLocal();
+  var pendingCardList = storageList.filter(function(card) {
     return !card.completed;
   });
   loadCards(pendingCardList);
 }
 
-function loadCards(parsedCardList) {
-  if (localStorage.length > 0) {
-    cardArray = parsedCardList;
-    prependCards(parsedCardList);
-  }
+function showCompleted() {
+  var storageList = getLocal();
+  var sortedByCompletedList = storageList.sort(function (a, b) {
+    if (a.completed < b.completed) {return -1}
+    if (a.completed > b.completed) {return  1}
+    return 0;
+  });
+  loadCards(sortedByCompletedList);
 }
 
 function clearCardDeck() {
@@ -160,28 +165,28 @@ function blurOnEnter(e) {
 }
 
 function upImportance() {
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
   if (existingImp == 'None') {
-    $(this).siblings('.imp-container').children().text('Low')
+    $(this).siblings('.imp-container').children().text('Low');
 	} else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('Normal')
+    $(this).siblings('.imp-container').children().text('Normal');
 	} else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('High')
+    $(this).siblings('.imp-container').children().text('High');
   } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Critical')
+    $(this).siblings('.imp-container').children().text('Critical');
 	}
 }
 
 function downImportance() {
-  var existingImp = $(this).siblings('.imp-container').children()[0].innerText
+  var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
   if (existingImp == 'Critical') {
-    $(this).siblings('.imp-container').children().text('High')
+    $(this).siblings('.imp-container').children().text('High');
   } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Normal')
+    $(this).siblings('.imp-container').children().text('Normal');
   } else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('Low')
+    $(this).siblings('.imp-container').children().text('Low');
   } else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('None')
+    $(this).siblings('.imp-container').children().text('None');
   }
 }
 
@@ -189,15 +194,4 @@ function markCompleted() {
   $(this).parent().toggleClass('completed-active');
   $(this).blur();
   editText();
-}
-
-function showCompleted() {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  var sortedByCompletedList = parsedCardList.sort(function (a, b) {
-    if (a.completed < b.completed) {return -1}
-    if (a.completed > b.completed) {return  1}
-    return 0;
-  });
-  loadCards(sortedByCompletedList);
 }
