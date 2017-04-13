@@ -49,6 +49,10 @@ function Card(title, idea, uniqueID) {
   stringifyArray();
 }
 
+function setLocal(array) {
+  localStorage.setItem('cardlist', JSON.stringify(array))  
+}
+
 function stringifyArray() {
   cardArrayStringify = JSON.stringify(cardArray);
   toStorage(cardArrayStringify);
@@ -81,8 +85,8 @@ function clearCardDeck() {
 }
 
 function prependCards(array) {
-  clearCardDeck()
-  array.forEach(function(card){
+  clearCardDeck();
+  array.forEach(function(card) {
     if (card.completed) {
       var completedClass = 'completed-active';
     }
@@ -106,20 +110,19 @@ function prependCards(array) {
 )}
 
 function deleteCardElement() {
-  var uniqueCardIdtoParse = $(this).closest('article').attr('id');
-  var uniqueCardId = parseInt(uniqueCardIdtoParse)
+  var uniqueCardId = $(this).closest('article').attr('id');
   $(this).closest('article').remove();
   deleteCardLocal(uniqueCardId);
 }
 
 function deleteCardLocal(uniqueCardId) {
-  var cardID = uniqueCardId
+  var cardID = parseInt(uniqueCardId);
   cardArray.forEach(function(idea, index) {
-    if(cardID == idea.uniqueID) {
-      cardArray.splice(index, 1)
+    if (cardID === idea.uniqueID) {
+      cardArray.splice(index, 1);
     }
-    localStorage.setItem('cardlist', JSON.stringify(cardArray) )
-  })
+    setLocal(cardArray);
+  });
 }
 
 function searchResult() {
@@ -131,7 +134,7 @@ function searchResult() {
     } else {
       $(this).parent().hide();
     }
-  })
+  });
 }
 
 function editText() {
@@ -146,13 +149,7 @@ function editText() {
       object.completed = completedState;
     }
   });
-  refreshStorage();
-}
-
-function refreshStorage () {
-  var storageList = localStorage.getItem('cardlist');
-  var parsedCardList = JSON.parse(storageList);
-  localStorage.setItem('cardlist', JSON.stringify(cardArray) )
+  setLocal(cardArray);
 }
 
 function blurOnEnter(e) {
@@ -190,8 +187,8 @@ function downImportance() {
 
 function markCompleted() {
   $(this).parent().toggleClass('completed-active');
-  editText();
   $(this).blur();
+  editText();
 }
 
 function showCompleted() {
