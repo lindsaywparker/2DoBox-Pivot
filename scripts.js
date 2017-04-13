@@ -12,8 +12,8 @@ $('.filter-input').on('keyup', searchResult);
 $('.show-completed-btn').on('click', showCompleted);
 
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
-                    .on('focusout', '.idea-card', editText)
-                    .on('keyup', '.idea-card', blurOnEnter)
+                    .on('focusout', '.task-card', editText)
+                    .on('keyup', '.task-card', blurOnEnter)
                     .on('click', '.completed-btn', markCompleted)
                     .on('click', '#up-vote', upImportance)
                     .on("click", '#down-vote', downImportance);
@@ -30,9 +30,9 @@ function loadCards(cardList) {
   }
 }
 
-function Card(title, idea, uniqueID) {
+function Card(title, task, uniqueID) {
   this.title = title;
-  this.idea = idea;
+  this.task = task;
   this.uniqueID = uniqueID;
   this.importance = 'Normal';
   this.completed = false;
@@ -54,9 +54,9 @@ function disableSave () {
 
 function addCard() {
   var title = $('.title-input').val();
-  var idea = $('.task-input').val();
+  var task = $('.task-input').val();
   var uniqueID = Date.now();
-  var card = new Card(title, idea, uniqueID);
+  var card = new Card(title, task, uniqueID);
   emptyInputs();
   disableSave();
 }
@@ -96,11 +96,11 @@ function prependCards(array) {
       var completedClass = 'completed-active';
     }
   $('.card-container').prepend(
-    `<article class='idea-card ${completedClass}' id=${card.uniqueID}>
+    `<article class='task-card ${completedClass}' id=${card.uniqueID}>
       <div class='text'>
         <h3 class='card-title' contenteditable='true'>${card.title}</h3>
         <button class='delete-btn card-btns'></button>
-        <p class='card-idea' contenteditable='true'>${card.idea}</p>
+        <p class='card-task' contenteditable='true'>${card.task}</p>
       </div>
       <div class='card-footer'>
         <button class='up-vote card-btns' id='up-vote'></button>
@@ -122,8 +122,8 @@ function deleteCardElement() {
 
 function deleteCardLocal(uniqueCardId) {
   var cardID = parseInt(uniqueCardId);
-  cardArray.forEach(function(idea, index) {
-    if (cardID === idea.uniqueID) {
+  cardArray.forEach(function(task, index) {
+    if (cardID === task.uniqueID) {
       cardArray.splice(index, 1);
     }
     setLocal(cardArray);
@@ -150,7 +150,7 @@ function editText() {
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
-      object.idea = bodyText;
+      object.task = bodyText;
       object.completed = completedState;
     }
   });
