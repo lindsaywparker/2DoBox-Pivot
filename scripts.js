@@ -36,6 +36,7 @@ function Card(title, task, uniqueID) {
   this.uniqueID = uniqueID;
   this.importance = 'Normal';
   this.completed = false;
+  // BUG: Pull the following out of the constructor function
   cardArray.push(this);
   setLocal(cardArray);
   loadCards(cardArray);
@@ -62,6 +63,10 @@ function addCard() {
 }
 
 function getLocal() {
+  if (localStorage.getItem('cardlist') === null) {
+    var cardArray = [];
+    localStorage.setItem('cardlist',JSON.stringify(cardArray));
+  }
   var storageList = JSON.parse(localStorage.getItem('cardlist'));
   return storageList;  
 }
@@ -164,7 +169,9 @@ function blurOnEnter(e) {
   }
 }
 
+// BUG: Turn the following into an array; Make it persist
 function upImportance() {
+  var impLevels = ['None', 'Low', 'Normal', 'High', 'Critical'];
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
   if (existingImp == 'None') {
     $(this).siblings('.imp-container').children().text('Low');
