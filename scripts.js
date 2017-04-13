@@ -20,7 +20,7 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
 
 // functions
 function setLocal(array) {
-  localStorage.setItem('cardlist', JSON.stringify(array))  ;
+  localStorage.setItem('cardlist', JSON.stringify(array));
 }
 
 function loadCards(cardList) {
