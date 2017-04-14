@@ -63,7 +63,7 @@ input {
 .card-container,
 .input-container,
 .filter-input {
-  width: 50vw;
+  width: 500px;
   margin: 0 auto;
 }
 
@@ -74,8 +74,20 @@ input {
   margin: 30px auto;
 }
 
-.show-completed-btn {
-  display: block;
+.filter-importance-label {
+  font-size: 14px;
+  text-align: center;
+}
+
+.filter-importance-container {
+  display: flex;
+  justify-content: space-between;
+  width: 520px;
+  margin: 0 auto;
+}
+
+.show-completed-btn,
+.filter-importance {
   border: none;
   border-radius: 5px;
   margin: 30px auto;
@@ -84,7 +96,18 @@ input {
   font-family: 'Open Sans', sans-serif;
 }
 
-.show-completed-btn:hover {
+.show-completed-btn {
+  display: block;
+}
+
+.filter-importance {
+  display: inline;
+  width: 100px;
+  margin: 10px;
+}
+
+.show-completed-btn:hover,
+.filter-importance:hover {
   background-color: #6D6E71;
   color: #F1F1F2;
 }
