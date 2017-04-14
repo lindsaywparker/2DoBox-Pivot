@@ -15,8 +15,8 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.task-card', editText)
                     .on('keyup', '.task-card', blurOnEnter)
                     .on('click', '.completed-btn', markCompleted)
-                    .on('click', '#up-vote', upImportance)
-                    .on("click", '#down-vote', downImportance);
+                    .on('click', '.up-vote', upImportance)
+                    .on('click', '.down-vote', downImportance);
 
 // functions
 function setLocal(array) {
@@ -108,8 +108,8 @@ function prependCards(array) {
         <p class='card-task' contenteditable='true'>${card.task}</p>
       </div>
       <div class='card-footer'>
-        <button class='up-vote card-btns' id='up-vote'></button>
-        <button class='down-vote card-btns' id='down-vote'></button>
+        <button class='up-vote card-btns'></button>
+        <button class='down-vote card-btns'></button>
         <h5 class='imp-container'>importance:
           <span class='importance'>${card.importance}</span>
         </h5>
@@ -152,14 +152,18 @@ function editText() {
   var bodyText = $(this).find('p').text();
   var cardId = parseInt($(this).attr('id'));
   var completedState = $(this).hasClass('completed-active');
+  // var importance = $(this).find('span').text();
+  // console.log(importance);
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
       object.task = bodyText;
       object.completed = completedState;
+      // object.importance = importance;
     }
   });
   setLocal(cardArray);
+  // console.log(localStorage);
 }
 
 function blurOnEnter(e) {
@@ -169,32 +173,31 @@ function blurOnEnter(e) {
   }
 }
 
-// BUG: Turn the following into an array; Make it persist
+// BUG: Persistence
 function upImportance() {
   var impLevels = ['None', 'Low', 'Normal', 'High', 'Critical'];
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
-  if (existingImp == 'None') {
-    $(this).siblings('.imp-container').children().text('Low');
-	} else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('Normal');
-	} else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('High');
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Critical');
-	}
+  var existingImpIndex = $.inArray(existingImp, impLevels);
+  if (existingImpIndex < impLevels.length - 1) {
+    var newImp = impLevels[existingImpIndex + 1];
+  } else {
+    var newImp = existingImp;
+  }
+  $(this).siblings('.imp-container').children().text(newImp);
+  editText();
 }
 
 function downImportance() {
+  var impLevels = ['None', 'Low', 'Normal', 'High', 'Critical'];
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
-  if (existingImp == 'Critical') {
-    $(this).siblings('.imp-container').children().text('High');
-  } else if (existingImp == 'High') {
-    $(this).siblings('.imp-container').children().text('Normal');
-  } else if (existingImp == 'Normal') {
-    $(this).siblings('.imp-container').children().text('Low');
-  } else if (existingImp == 'Low') {
-    $(this).siblings('.imp-container').children().text('None');
+  var existingImpIndex = $.inArray(existingImp, impLevels);
+  if (existingImpIndex > 0) {
+    var newImp = impLevels[existingImpIndex - 1];
+  } else {
+    var newImp = existingImp;
   }
+  $(this).siblings('.imp-container').children().text(newImp);
+  editText();
 }
 
 function markCompleted() {
