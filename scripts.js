@@ -152,18 +152,17 @@ function editText() {
   var bodyText = $(this).find('p').text();
   var cardId = parseInt($(this).attr('id'));
   var completedState = $(this).hasClass('completed-active');
-  // var importance = $(this).find('span').text();
-  // console.log(importance);
+  var importance = $(this).find('span').text();
   cardArray.forEach(function(object, index) {
     if(cardId == object.uniqueID) {
       object.title = titleText;
       object.task = bodyText;
       object.completed = completedState;
-      // object.importance = importance;
+      object.importance = importance;
     }
   });
   setLocal(cardArray);
-  // console.log(localStorage);
+  console.log(localStorage);
 }
 
 function blurOnEnter(e) {
@@ -173,7 +172,6 @@ function blurOnEnter(e) {
   }
 }
 
-// BUG: Persistence
 function upImportance() {
   var impLevels = ['None', 'Low', 'Normal', 'High', 'Critical'];
   var existingImp = $(this).siblings('.imp-container').children()[0].innerText;
@@ -184,7 +182,7 @@ function upImportance() {
     var newImp = existingImp;
   }
   $(this).siblings('.imp-container').children().text(newImp);
-  editText();
+  $(this).blur();
 }
 
 function downImportance() {
@@ -197,11 +195,10 @@ function downImportance() {
     var newImp = existingImp;
   }
   $(this).siblings('.imp-container').children().text(newImp);
-  editText();
+  $(this).blur();
 }
 
 function markCompleted() {
   $(this).parent().toggleClass('completed-active');
   $(this).blur();
-  editText();
 }
