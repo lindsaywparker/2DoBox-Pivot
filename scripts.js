@@ -209,7 +209,7 @@ function filterImp(e) {
   imp = ($(this).text());
   var storageList = getLocal();
   var impCardList = storageList.filter(function(card) {
-    return (card.importance.toLowerCase() === imp);
+    return (card.importance.toLowerCase() === imp && !card.completed);
   });
   loadCards(impCardList);
 }
