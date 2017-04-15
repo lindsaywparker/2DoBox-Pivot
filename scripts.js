@@ -58,6 +58,7 @@ function disableSave () {
 }
 
 function addCard() {
+  
   var title = $('.title-input').val();
   var task = $('.task-input').val();
   var uniqueID = Date.now();

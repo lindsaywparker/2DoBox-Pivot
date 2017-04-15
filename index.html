@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
@@ -10,15 +10,15 @@
   </head>
   <body>
     <header role='banner'>
-      <section class='input-container'>
-        <h1>2Do<span>Box</span></h1>
+      <h1>2Do<span>Box</span></h1>
+      <form class='input-container'>
         <input class='title-input' type='text' placeholder='Title'>
         <input class='task-input' type='text' placeholder='Task'>
         <button class='submit-btn' type='submit'>save</button>
-      </section>
+      </form>
     </header>
     <main role='main'>
-      <input class='filter-input' placeholder='Filter'>
+      <input class='filter-input' role='search' placeholder='Filter'>
       <p class='filter-importance-label'>filter by importance</p>
       <section class='filter-importance-container'>
         <button class='filter-importance none'>none</button>

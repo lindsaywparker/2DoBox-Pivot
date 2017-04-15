@@ -146,6 +146,7 @@ p {
 
 .card-footer {
   display: inline-block;
+  width: 395px;
 }
 
 .card-btns {
@@ -192,7 +193,7 @@ p {
   display: inline-block;
   border: none;
   border-radius: 5px;
-  margin: 5px 0 5px 30px;
+  margin: 5px 0;
   background-color: #D1D3D4;
   color: #FFF;
   font-family: 'Open Sans', sans-serif;
@@ -216,6 +217,10 @@ p {
   .completed-btn-container {
     width: 440px;
   }
+  
+  .card-footer {
+    width: 335px;
+  }
 }
 
 /* media max 500 */
@@ -233,5 +238,9 @@ p {
   .show-completed-btn,
   .show-all-pending-btn {
     margin: 10px 5px;
+  }
+  
+  .completed-btn {
+    margin-left: 199px;
   }
 }
