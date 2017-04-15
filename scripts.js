@@ -40,10 +40,6 @@ function Card(title, task, uniqueID) {
   this.uniqueID = uniqueID;
   this.importance = 'Normal';
   this.completed = false;
-  // BUG: Pull the following out of the constructor function
-  cardArray.push(this);
-  setLocal(cardArray);
-  loadCards(cardArray);
 }
 
 function emptyInputs() {
@@ -58,11 +54,13 @@ function disableSave () {
 }
 
 function addCard() {
-  
   var title = $('.title-input').val();
   var task = $('.task-input').val();
   var uniqueID = Date.now();
   var card = new Card(title, task, uniqueID);
+  cardArray.push(card);
+  setLocal(cardArray);
+  loadCards(cardArray);
   emptyInputs();
   disableSave();
 }
