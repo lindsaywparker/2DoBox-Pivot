@@ -86,27 +86,36 @@ input {
   margin: 0 auto;
 }
 
+.completed-btn-container {
+  display: flex;
+  justify-content: space-between;
+  width: 520px;
+  margin: 0 auto 30px auto;
+}
+
 .show-completed-btn,
+.show-all-pending-btn,
 .filter-importance {
   border: none;
   border-radius: 5px;
-  margin: 30px auto;
+  margin: 10px;
   background-color: #F1F1F2;
   color: #6D6E71;
   font-family: 'Open Sans', sans-serif;
 }
 
-.show-completed-btn {
-  display: block;
-}
-
 .filter-importance {
   display: inline;
   width: 100px;
-  margin: 10px;
+}
+
+.show-completed-btn,
+.show-all-pending-btn {
+  width: 188px;
 }
 
 .show-completed-btn:hover,
+.show-all-pending-btn:hover,
 .filter-importance:hover {
   background-color: #6D6E71;
   color: #F1F1F2;
@@ -202,17 +211,27 @@ p {
 @media screen and (max-width: 720px) {
   .filter-input,
   .card-container,
-  .input-container {
-    width: 60vw;
+  .input-container,
+  .filter-importance-container,
+  .completed-btn-container {
+    width: 440px;
   }
 }
 
-/* media max 620 */
+/* media max 500 */
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 500px) {
   .filter-input,
   .card-container,
-  .input-container {
-    width: 70vw;
+  .input-container,
+  .filter-importance-container,
+  .completed-btn-container {
+    width: 300px;
+  }
+  
+  .filter-importance,
+  .show-completed-btn,
+  .show-all-pending-btn {
+    margin: 10px 5px;
   }
 }

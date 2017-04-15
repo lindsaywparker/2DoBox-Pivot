@@ -1,8 +1,8 @@
-// setup
+// Setup
 fromStorage();
 disableSave();
 
-// event listeners
+// Event Listeners
 $('.title-input, .task-input').on('keyup', disableSave);
 
 $('.submit-btn').on('click', addCard);
@@ -11,6 +11,10 @@ $('.filter-input').on('keyup', searchResult);
 
 $('.show-completed-btn').on('click', showCompleted);
 
+$('.filter-importance').on('click', filterImp);
+
+$('.show-all-pending-btn').on('click', fromStorage);
+
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.task-card', editText)
                     .on('keyup', '.task-card', blurOnEnter)
@@ -18,7 +22,7 @@ $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('click', '.up-vote', upImportance)
                     .on('click', '.down-vote', downImportance);
 
-// functions
+// Functions
 function setLocal(array) {
   localStorage.setItem('cardlist', JSON.stringify(array));
 }
@@ -162,7 +166,6 @@ function editText() {
     }
   });
   setLocal(cardArray);
-  console.log(localStorage);
 }
 
 function blurOnEnter(e) {
@@ -201,4 +204,13 @@ function downImportance() {
 function markCompleted() {
   $(this).parent().toggleClass('completed-active');
   $(this).blur();
+}
+
+function filterImp(e) {
+  imp = ($(this).text());
+  var storageList = getLocal();
+  var impCardList = storageList.filter(function(card) {
+    return (card.importance.toLowerCase() === imp);
+  });
+  loadCards(impCardList);
 }
