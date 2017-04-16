@@ -1,3 +1,6 @@
+// BUG: search only works for cards on the screen
+// BUG: 'show more' is always displayed
+
 // Setup
 fromStorage();
 disableSave();
@@ -14,6 +17,8 @@ $('.show-completed-btn').on('click', showCompleted);
 $('.filter-importance').on('click', filterImp);
 
 $('.show-all-pending-btn').on('click', fromStorage);
+
+$('.show-more').on('click', showAll);
 
 $('.card-container').on('click', '.delete-btn', deleteCardElement)
                     .on('focusout', '.task-card', editText)
@@ -45,6 +50,7 @@ function Card(title, task, uniqueID) {
 function emptyInputs() {
   $('.title-input').val('');
   $('.task-input').val('');
+  $('.filter-input').val('');
 }
 
 function disableSave () {
@@ -76,10 +82,22 @@ function getLocal() {
 
 function fromStorage() {
   var storageList = getLocal();
-  var pendingCardList = storageList.filter(function(card) {
+  var pendingRecentCardList = storageList.filter(function(card) {
+    return !card.completed;
+  }).sort(function (a, b) {
+    if (a.uniqueID > b.uniqueID) {return -1}
+    if (a.uniqueID < b.uniqueID) {return 1}
+  }).slice(0, 10).reverse();
+  loadCards(pendingRecentCardList);
+  emptyInputs();
+}
+
+function showAll() {
+  var storageList = getLocal();
+  var pendingRecentCardList = storageList.filter(function(card) {
     return !card.completed;
   });
-  loadCards(pendingCardList);
+  loadCards(pendingRecentCardList);
 }
 
 function showCompleted() {
