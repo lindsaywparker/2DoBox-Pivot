@@ -95,7 +95,8 @@ input {
 
 .show-completed-btn,
 .show-all-pending-btn,
-.filter-importance {
+.filter-importance,
+.show-more {
   border: none;
   border-radius: 5px;
   margin: 10px;
@@ -114,9 +115,16 @@ input {
   width: 188px;
 }
 
+.show-more {
+  display: block;
+  width: 500px;
+  margin: 30px auto;
+}
+
 .show-completed-btn:hover,
 .show-all-pending-btn:hover,
-.filter-importance:hover {
+.filter-importance:hover,
+.show-more:hover {
   background-color: #6D6E71;
   color: #F1F1F2;
 }
@@ -214,7 +222,8 @@ p {
   .card-container,
   .input-container,
   .filter-importance-container,
-  .completed-btn-container {
+  .completed-btn-container,
+  .show-more {
     width: 440px;
   }
   
@@ -230,7 +239,8 @@ p {
   .card-container,
   .input-container,
   .filter-importance-container,
-  .completed-btn-container {
+  .completed-btn-container,
+  .show-more {
     width: 300px;
   }
   
