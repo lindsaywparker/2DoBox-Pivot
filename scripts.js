@@ -1,4 +1,3 @@
-// BUG: search only works for cards on the screen
 // BUG: 'show more' is always displayed
 
 // Setup
@@ -10,7 +9,8 @@ $('.title-input, .task-input').on('keyup', disableSave);
 
 $('.submit-btn').on('click', addCard);
 
-$('.filter-input').on('keyup', searchResult);
+$('.filter-input').on('keyup', searchResult)
+                  .on('focusout', emptyInputs);
 
 $('.show-completed-btn').on('click', showCompleted);
 
@@ -158,6 +158,7 @@ function deleteCardLocal(uniqueCardId) {
 
 function searchResult() {
   var searchInput = $(this).val().toLowerCase();
+  showCompleted();
   $('.text').each(function() {
     var cardText = $(this).text().toLowerCase();
     if (cardText.indexOf(searchInput) != -1) {
