@@ -1,5 +1,3 @@
-// BUG: 'show more' is always displayed
-
 // Setup
 fromStorage();
 disableSave();
@@ -53,10 +51,14 @@ function emptyInputs() {
   $('.filter-input').val('');
 }
 
-function disableSave () {
+function disableSave() {
   var emptyTitle = ($('.title-input').val() === '');
   var emptyBody = ($('.task-input').val() === '');
   $('.submit-btn').prop('disabled', emptyTitle || emptyBody);
+}
+
+function disableMore(value) {
+  $('.show-more').prop('disabled', value);
 }
 
 function addCard() {
@@ -82,14 +84,16 @@ function getLocal() {
 
 function fromStorage() {
   var storageList = getLocal();
-  var pendingRecentCardList = storageList.filter(function(card) {
+  var pendingCardList = storageList.filter(function(card) {
     return !card.completed;
   }).sort(function (a, b) {
     if (a.uniqueID > b.uniqueID) {return -1}
     if (a.uniqueID < b.uniqueID) {return 1}
-  }).slice(0, 10).reverse();
+  });
+  var pendingRecentCardList = pendingCardList.slice(0, 10).reverse();
   loadCards(pendingRecentCardList);
   emptyInputs();
+  disableMore(pendingCardList.length < 11);
 }
 
 function showAll() {
@@ -98,6 +102,7 @@ function showAll() {
     return !card.completed;
   });
   loadCards(pendingRecentCardList);
+  disableMore(true);
 }
 
 function showCompleted() {

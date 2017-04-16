@@ -55,10 +55,7 @@ input {
   background-color: #045E55;
 }
 
-.submit-btn:disabled {
-  background-color: #6D6E71;
-  color: #D1D3D4;
-}
+
 
 .card-container,
 .input-container,
@@ -127,6 +124,12 @@ input {
 .show-more:hover {
   background-color: #6D6E71;
   color: #F1F1F2;
+}
+
+.submit-btn:disabled,
+.show-more:disabled {
+  background-color: #6D6E71;
+  color: #D1D3D4;
 }
 
 /* card */
